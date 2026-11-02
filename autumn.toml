@@ -1,0 +1,32 @@
+# Trellis — one process, one Arena, in memory. Nothing is persisted:
+# see docs/adr/0001-the-arena-lives-in-memory.md.
+
+[server]
+host = "127.0.0.1"
+port = 3000
+
+[log]
+level = "info"
+format = "Pretty"
+
+[health]
+path = "/health"
+
+# Joining and steering are fetch() POSTs carrying the token from the page's
+# meta tag in an x-csrf-token header.
+[security.csrf]
+enabled = true
+
+[session]
+backend = "memory"
+allow_memory_in_production = true
+
+[jobs]
+backend = "memory"
+workers = 0
+
+# Live events: one in-process broadcast topic, `garden`. A tick is a few dozen
+# bytes; a browser that falls behind sees a gap in tick numbers and refetches.
+[channels]
+backend = "local"
+capacity = 512
